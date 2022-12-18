@@ -3,7 +3,7 @@ import {
     useLocation,
 } from 'react-router-dom';
 
-import useAuth from '../../App';
+import useAuth from '../../providers/AuthHook';
 
 function LoginPage() {
     let navigate = useNavigate();
@@ -13,12 +13,14 @@ function LoginPage() {
     let from = location.state?.from?.pathname || "/";
 
     function handleSubmit(event) {
+        console.log('hello', event)
         event.preventDefault();
 
         let formData = new FormData(event.currentTarget);
         let username = formData.get("username");
+        let password = formData.get("password");
 
-        auth.signin(username, () => {
+        auth.authenticate(username, password, () => {
             // Send them back to the page they tried to visit when they were
             // redirected to the login page. Use { replace: true } so we don't create
             // another entry in the history stack for the login page.  This means that
@@ -36,6 +38,9 @@ function LoginPage() {
             <form onSubmit={handleSubmit}>
                 <label>
                     Username: <input name="username" type="text" />
+                </label>{" "}
+                <label>
+                    Password: <input name="password" type="text" />
                 </label>{" "}
                 <button type="submit">Login</button>
             </form>
